@@ -1,62 +1,65 @@
 import { Outlet, Link } from "react-router-dom";
 
 const DashboardLayout = () => {
-   return (
-    <div className="h-screen flex flex-col">
+return (
+  <div className="min-h-screen bg-[#FFF7ED]">
 
-      {/* TOP NAVBAR */}
-      <Navbar />
+    
+    <div className="bg-[#EA580C] text-white shadow-lg px-8 py-4 flex items-center justify-between">
 
-      {/* MAIN DASHBOARD AREA */}
-      <div className="flex flex-1">
+      
+      <div>
 
-        {/* SIDEBAR */}
-        <div className="w-64 bg-gray-900 text-white p-5">
+        <h1
+          className="text-4xl font-black"
+          style={{ fontFamily: "'Ibarra Real Nova', serif" }}
+        >
+          NovaShelf
+        </h1>
 
-          <h2 className="text-2xl font-bold mb-8">
-            Dashboard
-          </h2>
-
-          <ul className="space-y-4">
-
-            <li>
-              <Link
-                to=""
-                className="block hover:bg-gray-700 px-4 py-2 rounded-lg transition"
-              >
-                Home
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to="resources"
-                className="block hover:bg-gray-700 px-4 py-2 rounded-lg transition"
-              >
-                Resources
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                to="profile"
-                className="block hover:bg-gray-700 px-4 py-2 rounded-lg transition"
-              >
-                Profile
-              </Link>
-            </li>
-
-          </ul>
-        </div>
-
-        {/* PAGE CONTENT */}
-        <div className="flex-1 bg-gray-100 p-6 overflow-y-auto">
-          <Outlet />
-        </div>
+        <p className="text-orange-100 text-sm">
+          User Dashboard
+        </p>
 
       </div>
+
+      
+      <div className="flex items-center gap-4">
+
+        <Link
+          to=""
+          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
+        >
+          Home
+        </Link>
+
+        <Link
+          to="resources"
+          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
+        >
+          Resources
+        </Link>
+
+        <Link
+          to="profile"
+          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
+        >
+          Profile
+        </Link>
+
+      </div>
+
     </div>
-  );
+
+    
+    <div className="p-6">
+
+      <Outlet />
+
+    </div>
+
+  </div>
+);
 };
 
 export default DashboardLayout;

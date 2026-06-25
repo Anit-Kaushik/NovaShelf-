@@ -1,14 +1,14 @@
 import { useState ,  useEffect } from "react";
-import { useParams } from "react-router-dom";//Used to read URL parameters
+import { useParams } from "react-router-dom";
 import Comments from "../pages/Comments";
 
 import API from "../api/axios";
 
-const PdfViewer = () => { //func component show pdf viewer and commentsUI
+const PdfViewer = () => { 
 
-  const { pdfId } = useParams(); //Reads pdfId from URL 
-  const [showComments, setShowComments] = useState(false);//state guide whether to show comments on right side or not(only pdf on full screen)
-  //false->comments hidden at start , true ->comments shown
+  const { pdfId } = useParams();
+  const [showComments, setShowComments] = useState(false);
+  
   const [pdfUrl, setPdfUrl] = useState("");
   const [loading, setLoading] = useState(true);
   
@@ -18,7 +18,7 @@ const PdfViewer = () => { //func component show pdf viewer and commentsUI
   const fetchPdf = async () => {
     try {
       const res = await API.get(`/resources/${pdfId}`);
-      // setPdfUrl("https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+    
       setPdfUrl(res.data.fileUrl);
     } catch (error) {
       console.log(error);
@@ -30,98 +30,125 @@ const PdfViewer = () => { //func component show pdf viewer and commentsUI
   fetchPdf();
 }, [pdfId]);
 
-  return (
-    <div style={{ height: "calc(100vh - 60px)", overflow: "hidden" }}> {/*A full screen container*/}
+return (
+  <div className="h-[calc(100vh-60px)] overflow-hidden bg-[#0F172A] text-white">
 
-    <div
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "10px",
-    borderBottom: "1px solid #ccc",
-    height: "40px"
-  }}
->
-  <h3>Pdf Viewer</h3>
-  <button onClick={() => setShowComments(!showComments)}>
-    {showComments ? "Hide Comments" : "Show Comments"}
-  </button>
-  <button onClick={() => window.open(pdfUrl, "_blank")}>
-  Fullscreen
-</button>
+   
+    <div className="flex justify-between items-center px-6 py-4 border-b border-[#1E293B] bg-[#111827]">
 
-  <button onClick={() => window.open(pdfUrl)}>
-    Download
-  </button>
-</div>
+      <h3 className="text-2xl font-bold text-[#CCFBF1]">
+        PDF Viewer
+      </h3>
 
-      {/* MAIN AREA */}
-       {/* PDF AREA */}
+      <div className="flex gap-3">
 
-      {!showComments ? (
-        <div style={{ height: "100%" }}>
-         {loading ? (
-  <p>Loading PDF...</p>
-) : pdfUrl ? (
-  
-  <iframe
-    src={pdfUrl}
-    width="100%"
-    height="100%"
-    style={{ border: "none" }}
-    title="PDF Viewer"
-  />
-  
-) : (
-  <p>Failed to load PDF</p>
-)}
-        </div>
-      ) : (
-        /* if comments ON */
-        <div
-          style={{
-            display: "flex",
-            height: "100%"
-          }}
+        <button
+          onClick={() => setShowComments(!showComments)}
+          className="bg-[#0F766E] hover:bg-[#115E59] transition px-4 py-2 rounded-xl font-medium"
         >
-          {/* LEFT = PDF */}
-          <div style={{ flex: 2 }}>
-           {loading ? (
-  <p>Loading PDF...</p>
-) : pdfUrl ? (
-  
-  <iframe
-    src={pdfUrl}
-    width="100%"
-    height="100%"
-    style={{ border: "none" }}
-    title="PDF Viewer"
-  />
- 
-) : (
-  <p>Failed to load PDF</p>
-)}
-          </div>
+          {showComments ? "Hide Comments" : "Show Comments"}
+        </button>
 
-          {/* RIGHT = comments */}
-          <div
-            style={{
-               flex: 1,
-    borderLeft: "1px solid #ddd",
-    padding: "10px",
-    overflowY: "auto",
-    height: "100%"
-            }}
-          >
-            <h3>Comments</h3>
-            <Comments pdfId={pdfId} />
-          </div>
-        </div>
-      )}
+        <button
+          onClick={() => window.open(pdfUrl, "_blank")}
+          className="bg-[#1E293B] hover:bg-[#334155] transition px-4 py-2 rounded-xl font-medium"
+        >
+          Fullscreen
+        </button>
+
+        <button
+          onClick={() => window.open(pdfUrl)}
+          className="bg-[#2563EB] hover:bg-[#1D4ED8] transition px-4 py-2 rounded-xl font-medium"
+        >
+          Download
+        </button>
+
+      </div>
 
     </div>
-  );
+
+    {/* Main Area */}
+    {!showComments ? (
+
+      <div className="h-full bg-[#020617]">
+
+        {loading ? (
+
+          <div className="h-full flex items-center justify-center text-lg text-gray-300">
+            Loading PDF...
+          </div>
+
+        ) : pdfUrl ? (
+
+          <iframe
+            src={pdfUrl}
+            width="100%"
+            height="100%"
+            className="border-none"
+            title="PDF Viewer"
+          />
+
+        ) : (
+
+          <div className="h-full flex items-center justify-center text-red-400 text-lg">
+            Failed to load PDF
+          </div>
+
+        )}
+
+      </div>
+
+    ) : (
+
+      <div className="flex h-full">
+
+        {/* PDF Section */}
+        <div className="flex-[2] bg-[#020617]">
+
+          {loading ? (
+
+            <div className="h-full flex items-center justify-center text-lg text-gray-300">
+              Loading PDF...
+            </div>
+
+          ) : pdfUrl ? (
+
+            <iframe
+              src={pdfUrl}
+              width="100%"
+              height="100%"
+              className="border-none"
+              title="PDF Viewer"
+            />
+
+          ) : (
+
+            <div className="h-full flex items-center justify-center text-red-400 text-lg">
+              Failed to load PDF
+            </div>
+
+          )}
+
+        </div>
+
+        {/* Comments Section */}
+        <div className="flex-1 border-l border-[#1E293B] bg-[#111827] overflow-y-auto p-5">
+
+          <h3 className="text-2xl font-bold text-[#CCFBF1] mb-5">
+            Comments
+          </h3>
+
+          <Comments pdfId={pdfId} />
+
+        </div>
+
+      </div>
+
+    )}
+
+  </div>
+);
 };
+
 
 export default PdfViewer;

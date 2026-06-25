@@ -1,15 +1,15 @@
-import { useContext } from "react";//usecontext-->to acces global state
-import { Navigate } from "react-router-dom";//navigate->used to redirect to another page
-import { AuthContext } from "../context/AuthContext";//import authentication context contains user,token, login ,logout
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
-const ProtectedRoute = ({ children }) => {//create protectedRoute component, children are any components(only components which should work when user login) wrapped inside it
-  const { user } = useContext(AuthContext);//get user form global state
+const ProtectedRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
 
-  if (!user) {//is no login go to loginpage . protect routes 
+  if (!user) {
     return <Navigate to="/login" />;
   }
 
-  return children;//if login ->allow access->show protected pages(childeren)
+  return children;
 };
 
 export default ProtectedRoute;

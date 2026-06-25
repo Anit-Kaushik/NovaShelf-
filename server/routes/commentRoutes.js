@@ -11,7 +11,7 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // public (any logged-in user)
-router.get("/:pdfId", getComments);//“When someone visits this URL, give comments of a PDF”
+router.get("/:pdfId", getComments);
 
 // protected routes
 router.post("/:pdfId", protect, addComment);//“Add a comment to a PDF”

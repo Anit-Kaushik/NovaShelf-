@@ -16,7 +16,7 @@ const resourceSchema = new mongoose.Schema({
     "ebook",
     "assignment",
     "question-paper",
-    "video"], // only these allowed
+    "video"], 
     required: true,
   },
   category: {

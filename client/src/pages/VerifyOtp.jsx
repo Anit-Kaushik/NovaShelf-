@@ -35,13 +35,13 @@ const VerifyOtp = () => {
   };
 
 return (
-  <div className="min-h-screen bg-[#F1C93B] flex items-center justify-center px-4 overflow-hidden relative">
+  <div className="min-h-screen bg-gradient-to-br from-[#F1C93B] via-[#FFE15D] to-[#FFD93D] flex items-center justify-center px-4">
 
     {/* OTP Card */}
-    <div className="relative z-10 w-full max-w-md bg-white/35 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl px-8 pt-6 pb-8">
+    <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-yellow-200">
 
       {/* Heading */}
-      <div className="mb-8 text-center">
+      <div className="text-center mb-8">
 
         <h1
           className="text-5xl font-black text-[#1A5D1A]"
@@ -50,25 +50,27 @@ return (
           NovaShelf
         </h1>
 
-        <h2 className="text-3xl font-bold text-[#1A5D1A] mt-4">
+        <h2 className="text-3xl font-bold text-gray-800 mt-4">
           Verify OTP
         </h2>
 
-        <p className="text-[#1A5D1A] mt-2 font-medium">
-          Enter OTP sent to:
+        <p className="text-gray-500 mt-3">
+          Enter OTP sent to
         </p>
 
-        <p className="text-[#1A5D1A] font-bold break-all">
+        <p className="text-[#1A5D1A] font-bold break-all mt-1">
           {email}
         </p>
 
       </div>
 
       {/* Form */}
-      <form onSubmit={handleVerify} className="space-y-5">
+      <form onSubmit={handleVerify} className="space-y-6">
 
+        {/* OTP Input */}
         <div>
-          <label className="block text-black mb-2 font-medium">
+
+          <label className="block text-gray-700 mb-2 font-semibold">
             OTP
           </label>
 
@@ -77,21 +79,23 @@ return (
             placeholder="Enter OTP"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-white/20 border border-[#1A5D1A] placeholder:text-black outline-none focus:ring-2 focus:ring-[#1A5D1A]"
+            className="w-full px-4 py-3 rounded-2xl border border-yellow-300 bg-yellow-50 outline-none focus:ring-2 focus:ring-[#1A5D1A] focus:border-[#1A5D1A] placeholder:text-gray-400 text-center tracking-[6px] text-lg font-bold"
           />
+
         </div>
 
         {/* Verify Button */}
         <button
           type="submit"
-          className="w-full bg-[#1A5D1A] hover:bg-[#50e306] transition duration-300 text-[#F1C93B] py-3 rounded-xl font-bold text-lg"
+          className="w-full bg-[#1A5D1A] hover:bg-[#2E7D32] transition duration-300 text-[#F1C93B] py-3 rounded-2xl font-bold text-lg"
         >
-          Verify
+          Verify OTP
         </button>
 
       </form>
 
     </div>
+
   </div>
 );
 };

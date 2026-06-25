@@ -22,20 +22,20 @@ import UploadResource from "./pages/admin/UploadResource";
 import ManageResources from "./pages/admin/ManageResources";
 import Users from "./pages/admin/Users";
 import EditResource from "./pages/admin/EditResource";
+import Home from "./pages/home";
 
 function App() {
   return (
     <BrowserRouter>
       {" "}
-      {/*This enables routing/navigation in your React app.means when is watch url and decide which pg to go. Also use history system to go to back url*/}
+      
      
       <Routes>
         {" "}
-        {/*This is a container that holds all your routes.*/}
-        {/* <Route path="/comments" element={<Comments />} /> */}
+        
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />{" "}
-        {/*when path become /login show login component*/}
+      
         <Route path="/register" element={<Register />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -48,7 +48,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<h2>Home Page</h2>} />
+          <Route index element={<Home/>} />
           <Route path="resources" element={<Resources />} />
           <Route path="pdf/:pdfId" element={<PdfViewer />} />
           <Route path="profile" element={<Profile />} />
@@ -61,7 +61,7 @@ function App() {
             </AdminRoute>
           }
         >
-          <Route index element={<h2>Admin Dashboard</h2>} />
+          <Route index element={<Home/>} />
           <Route path="upload" element={<UploadResource />} />
           <Route path="resources" element={<ManageResources />}/>
           <Route path="resources/edit/:id"  element={<EditResource />}/>

@@ -14,7 +14,7 @@ const EditResource = () => {
 
   const [loading, setLoading] = useState(true);
 
-  // FETCH RESOURCE
+  
   useEffect(() => {
 
     const fetchResource = async () => {
@@ -41,7 +41,7 @@ const EditResource = () => {
 
   }, [id]);
 
-  // UPDATE RESOURCE
+  
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -71,128 +71,100 @@ const EditResource = () => {
     return <h3>Loading...</h3>;
   }
 return (
-  <div className="min-h-screen bg-gradient-to-br from-[#EEF2FF] via-[#F8FAFC] to-[#E0F2FE] flex items-center justify-center px-4">
+  <div className="min-h-screen bg-[#0F766E] flex items-center justify-center px-4">
 
-    <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-[40px] overflow-hidden shadow-2xl">
+    <div className="w-full max-w-xl bg-[#CCFBF1] rounded-3xl shadow-2xl p-8">
 
-      {/* Left Creative Section */}
-      <div className="bg-gradient-to-br from-[#4338CA] via-[#6366F1] to-[#7C3AED] p-10 flex flex-col justify-between relative overflow-hidden">
+     
+      <div className="text-center mb-8">
 
-        {/* Decorative Circles */}
-        <div className="absolute w-72 h-72 bg-white/10 rounded-full -top-20 -left-20"></div>
-        <div className="absolute w-56 h-56 bg-white/10 rounded-full bottom-[-60px] right-[-40px]"></div>
+        <h1
+          className="text-5xl font-black text-[#134E4A]"
+          style={{ fontFamily: "'Ibarra Real Nova', serif" }}
+        >
+          NovaShelf
+        </h1>
 
-        <div className="relative z-10">
+        <h2 className="text-3xl font-bold text-[#134E4A] mt-4">
+          Edit Resource
+        </h2>
 
-          <h1
-            className="text-6xl font-black text-white leading-tight"
-            style={{ fontFamily: "'Ibarra Real Nova', serif" }}
-          >
-            NovaShelf
-          </h1>
-
-          <h2 className="text-4xl font-bold text-white mt-8">
-            Edit Resource
-          </h2>
-
-          <p className="text-white/80 text-lg mt-5 leading-relaxed">
-            Keep your library updated with modern and organized learning resources.
-          </p>
-
-        </div>
-
-        <div className="relative z-10 mt-10">
-
-          <div className="bg-white/15 backdrop-blur-md rounded-3xl p-5 border border-white/20">
-
-            <p className="text-white text-lg font-semibold">
-              📚 Smart Resource Management
-            </p>
-
-            <p className="text-white/70 mt-2">
-              Edit titles, categories, and resource types with a beautiful interface.
-            </p>
-
-          </div>
-
-        </div>
+        <p className="text-[#115E59] mt-2">
+          Update your resource details
+        </p>
 
       </div>
 
-      {/* Right Form Section */}
-      <div className="p-10 flex items-center bg-white">
+      
+      <form onSubmit={handleUpdate} className="space-y-5">
 
-        <form onSubmit={handleUpdate} className="w-full space-y-6">
+        
+        <div>
 
-          {/* Title */}
-          <div>
+          <label className="block text-[#134E4A] mb-2 font-semibold">
+            Title
+          </label>
 
-            <label className="block text-[#312E81] mb-2 font-semibold text-lg">
-              Title
-            </label>
+          <input
+            type="text"
+            value={title}
+            placeholder="Enter resource title"
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] placeholder:text-gray-400"
+          />
 
-            <input
-              type="text"
-              value={title}
-              placeholder="Enter resource title"
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-5 py-4 rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#6366F1] outline-none focus:ring-4 focus:ring-[#6366F1]/20 transition placeholder:text-gray-400"
-            />
+        </div>
 
-          </div>
+        
+        <div>
 
-          {/* Category */}
-          <div>
+          <label className="block text-[#134E4A] mb-2 font-semibold">
+            Category
+          </label>
 
-            <label className="block text-[#312E81] mb-2 font-semibold text-lg">
-              Category
-            </label>
+          <input
+            type="text"
+            value={category}
+            placeholder="Enter category"
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] placeholder:text-gray-400"
+          />
 
-            <input
-              type="text"
-              value={category}
-              placeholder="Enter category"
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-5 py-4 rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#6366F1] outline-none focus:ring-4 focus:ring-[#6366F1]/20 transition placeholder:text-gray-400"
-            />
+        </div>
 
-          </div>
+        
+        <div>
 
-          {/* Type */}
-          <div>
+          <label className="block text-[#134E4A] mb-2 font-semibold">
+            Resource Type
+          </label>
 
-            <label className="block text-[#312E81] mb-2 font-semibold text-lg">
-              Resource Type
-            </label>
-
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="w-full px-5 py-4 rounded-2xl bg-[#F8FAFC] border border-[#CBD5E1] focus:border-[#6366F1] outline-none focus:ring-4 focus:ring-[#6366F1]/20 transition"
-            >
-
-              <option value="">Select Type</option>
-              <option value="pdf">PDF</option>
-              <option value="notes">Notes</option>
-              <option value="ebook">E-Book</option>
-              <option value="assignment">Assignment</option>
-              <option value="question-paper">Question Paper</option>
-
-            </select>
-
-          </div>
-
-          {/* Button */}
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] hover:scale-[1.02] transition duration-300 text-white py-4 rounded-2xl font-bold text-lg shadow-lg"
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E]"
           >
-            Update Resource
-          </button>
 
-        </form>
+            <option value="">Select Type</option>
+            <option value="pdf">PDF</option>
+            <option value="notes">Notes</option>
+            <option value="ebook">E-Book</option>
+            <option value="assignment">Assignment</option>
+            <option value="question-paper">Question Paper</option>
 
-      </div>
+          </select>
+
+        </div>
+
+        
+        <button
+          type="submit"
+          className="w-full bg-[#0F766E] hover:bg-[#115E59] transition text-white py-3 rounded-xl font-bold text-lg"
+        >
+          Update Resource
+        </button>
+
+      </form>
 
     </div>
 

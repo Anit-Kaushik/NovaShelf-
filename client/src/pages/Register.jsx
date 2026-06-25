@@ -43,12 +43,7 @@ const Register = () => {
   return (
   <div className="min-h-screen bg-[#F1C93B] flex items-center justify-center px-4 overflow-hidden relative">
 
-    {/* Background Glow */}
-    {/* <div className="absolute w-[500px] h-[500px] bg-[#F1C93B] rounded-full blur-3xl top-[-120px] left-[-120px]"></div> */}
-
-    {/* <div className="absolute w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-3xl bottom-[-100px] right-[-100px]"></div> */}
-
-    {/* Register Card */}
+    
     <div className="relative z-10 w-full max-w-md bg-white/35 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl px-8 pt-6 pb-8">
 
       {/* Heading */}

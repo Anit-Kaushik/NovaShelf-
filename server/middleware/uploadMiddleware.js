@@ -1,15 +1,15 @@
-//Setup Multer (file upload)
 
-import multer from "multer";  //Imports the Multer library ->“I want to handle file uploads from users (PDF, image, etc.)”
 
-// store file temporarily -->Files will be stored temporarily on your server, not directly in cloud
-const storage = multer.diskStorage({ // You are telling Multer: “Store uploaded files on disk (your local system)”
+import multer from "multer";  
+
+
+const storage = multer.diskStorage({ 
   
-    destination: (req, file, cb) => {//You are telling Multer: 
-    cb(null, "uploads/");            //“Save all uploaded files inside uploads/ folder”
+    destination: (req, file, cb) => {
+    cb(null, "uploads/");           
   },
 
-  filename: (req, file, cb) => {  //(How to name file)  formate in which file name will be ->help in Prevents duplicate file names (very important)
+  filename: (req, file, cb) => {  
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
@@ -29,6 +29,6 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage,
   fileFilter
- });  //This creates a middleware -->“Use this storage setup whenever a file is uploaded”
+ });  
 
 export default upload;

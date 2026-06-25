@@ -3,11 +3,11 @@ import dotenv from "dotenv";
 
 
 dotenv.config();
-//Loads variables from .env file into process.env
 
-const connectDB = async () => {//Creates an async function to connect database
+
+const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);//Uses your connection string from .env to connect MongoDB
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Connected ✅");
   } catch (error) {
     console.error(error);

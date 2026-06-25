@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name: {             //Defines the name field
+  name: {             
     type: String,
     required: true,
   },
@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  password: {    //Important: 👉 You will store encrypted password here (not plain text)
+  password: {    
     type: String,
     required: true,
   },
@@ -19,17 +19,15 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user"
   },
-  isVerified: {//user approved or not
+  isVerified: {
       type: Boolean,
       default: false
     },
-  resetPasswordToken: String,//A temporary secret code stored in database
-  resetPasswordExpire: Date,//A time limit for reset token
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
     
    }, 
-{ timestamps: true });  //This adds automatic fields Meaning:When user created,When user updated
+{ timestamps: true }); 
 
-export default mongoose.model("User", userSchema); //This creates a Model 
+export default mongoose.model("User", userSchema); 
 
-// "User" → collection name (MongoDB creates users)
-// userSchema → structure

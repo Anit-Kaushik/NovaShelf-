@@ -190,138 +190,180 @@ const Comments = ({ pdfId }) => {
   return past.toLocaleString();//if old than one week show date and time when created
 };
 
-  return (
-    <div>
-      <h2>Comments Section</h2>
+return (
+  <div className="min-h-screen bg-white p-6">
 
-      {/*///////////////////////////adding input box for new comments and add button////////////*/}
+    {/* Heading */}
+    <div className="mb-8">
 
-      <input //create text field for writing new comment
-        type="text"
-        placeholder="Write comment..."
-        value={text}
-        onChange={(e) => setText(e.target.value)} //as input field changed value in text state changes
-      />
-
-      <button onClick={handleAddComment} disabled={adding}>
-            {adding ? "Adding..." : "Add Comment"}
-      </button>
-
-      {/*////////////////////////////////////////////////////////////////////////////////////////*/}
-
-      {/*//////////////////////////////// conatianer for Showing  comments //////////////////////////2*/}
-      <div style={{Height:"50vh"}}>
-        {comments.map(
-          (
-            c, //loop through all comments. c=single comment obj
-          ) => (
-            <div
-              key={c._id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "10px",
-                borderBottom: "1px solid #ccc",
-                paddingBottom: "8px",
-              }}
-            >
-              {/*comment must have unique key so id from db is used as key*/}
-
-              {/*///////////////show editing box or comment box ////////////////////////*/}
-              {editingId === c._id ? ( //means if user click edit button
-                <span>
-                  
-                  <strong>{c.userName}</strong>:
-                  <input
-                    value={editText} //input box for editing comment
-                    onChange={(e) => setEditText(e.target.value)}
-                    onKeyDown={(e) => {    //on press enter save edited comment
-                     if (e.key === "Enter") {
-                        handleUpdate(c._id);
-                        }
-                    }}
-                  />
-                </span>
-              ) : (
-                <span>
-                  <strong>{c.userName}</strong>
-                  <small style={{ marginLeft: "8px", color: "gray" }}>
-                   {formatTime(c.createdAt)}  {/*pass comment time in function and get stnadard formate of time and print it */}
-                  </small>    {/*small tag is used for less imporant text then normal text */}
-                  <br/>
-                  <span>{c.text}</span>
-                  {/*show c.text=>commment of that c object*/}
-                </span>
-              )}
-              {/*/////////////////////editing box and comment box ends here/////////////////////////////////////////////////// */}
-
-              {/*//////////////show save,edit button also show delete button for admin,user */}
-             {(user?.role === "admin" || user?.id === c.user) && (
-  <div style={{ display: "flex", gap: "8px" }}>
-
-    {/* ✏️ EDIT ONLY FOR NORMAL USER (OWNER ONLY) */}
-    {user?.role !== "admin" && user?.id === c.user && (
-      editingId === c._id ? (
-        <>
-          <button
-            onClick={() => handleUpdate(c._id)}
-            disabled={saving}
-          >
-            {saving ? "Saving..." : "Save"}
-          </button>
-
-          <button
-            onClick={() => {
-              setEditingId(null);
-              setEditText("");
-            }}
-          >
-            Cancel
-          </button>
-        </>
-      ) : (
-        <button
-          onClick={() => {
-            setEditingId(c._id);
-            setEditText(c.text);
-          }}
-        >
-          Edit
-        </button>
-      )
-    )}
-
-    {/* 🗑️ DELETE FOR BOTH ADMIN + OWNER */}
-    {(user?.role === "admin" || user?.id === c.user) && (
-      <button
-        onClick={() => handleDelete(c._id)}
-        disabled={deletingId === c._id}
-        style={{ color: "red" }}
+      <h1
+        className="text-4xl font-black text-[#0F766E]"
+        style={{ fontFamily: "'Ibarra Real Nova', serif" }}
       >
-        {deletingId === c._id ? "Deleting..." : "Delete"}
-      </button>
-    )}
+        NovaShelf
+      </h1>
 
-  </div>
-)}
-
-              {/*////////////////////save,edit,delete ends here ///////////////////////////////////////////////////// */}
-            </div>
-          ),
-        )}
-        <div ref={loaderRef}></div>
-      </div>
-
-      {/*////////////////////container showing comments ends here //////////////////////////////////////////////////// */}
-      
-      {/*////////////////////for prev and next page move//////////////////////////////////////////////////// */}
-      
-
-      {/*///////////////////////////prev,next ends here ///////////////////////////////////////////// */}
+      <h2 className="text-2xl font-bold text-gray-800 mt-2">
+        Comments
+      </h2>
 
     </div>
-  );
+
+    {/* Add Comment */}
+    <div className="flex gap-3 mb-8">
+
+      {/* Avatar */}
+      <div className="w-10 h-10 rounded-full bg-[#0F766E] flex items-center justify-center text-white font-bold">
+        {user?.name?.charAt(0)}
+      </div>
+
+      <div className="flex-1">
+
+        <input
+          type="text"
+          placeholder="Add a comment..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="w-full border-b border-gray-300 pb-2 outline-none focus:border-[#0F766E] bg-transparent text-black"
+        />
+
+        <div className="flex justify-end mt-3">
+
+          <button
+            onClick={handleAddComment}
+            disabled={adding}
+            className="bg-[#0F766E] hover:bg-[#115E59] text-white px-5 py-2 rounded-full font-medium"
+          >
+            {adding ? "Adding..." : "Comment"}
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {/* Comments List */}
+    <div className="space-y-6">
+
+      {comments.map((c) => (
+
+        <div
+          key={c._id}
+          className="flex gap-3"
+        >
+
+          {/* Avatar */}
+          <div className="w-10 h-10 rounded-full bg-[#0F766E] flex items-center justify-center text-white font-bold flex-shrink-0">
+            {c.userName?.charAt(0)}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1">
+
+            <div className="flex items-center gap-2">
+
+              <h3 className="font-semibold text-gray-800">
+                {c.userName}
+              </h3>
+
+              <small className="text-gray-500">
+                {formatTime(c.createdAt)}
+              </small>
+
+            </div>
+
+            {/* Edit Input */}
+            {editingId === c._id ? (
+
+              <div className="mt-2">
+
+                <input
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleUpdate(c._id);
+                    }
+                  }}
+                  className="w-full border-b border-gray-300 pb-2 outline-none focus:border-[#0F766E] text-black"
+                />
+
+                <div className="flex gap-2 mt-3">
+
+                  <button
+                    onClick={() => handleUpdate(c._id)}
+                    disabled={saving}
+                    className="bg-[#0F766E] text-white px-4 py-1 rounded-full text-sm"
+                  >
+                    {saving ? "Saving..." : "Save"}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setEditingId(null);
+                      setEditText("");
+                    }}
+                    className="bg-gray-200 px-4 py-1 rounded-full text-sm"
+                  >
+                    Cancel
+                  </button>
+
+                </div>
+
+              </div>
+
+            ) : (
+
+              <p className="text-gray-800 mt-1 break-words">
+                {c.text}
+              </p>
+
+            )}
+
+            {/* Buttons */}
+            {(user?.role === "admin" || user?.id === c.user) && (
+
+              <div className="flex gap-4 mt-3 text-sm">
+
+                {user?.role !== "admin" && user?.id === c.user && editingId !== c._id && (
+
+                  <button
+                    onClick={() => {
+                      setEditingId(c._id);
+                      setEditText(c.text);
+                    }}
+                    className="text-[#0F766E] font-medium hover:underline"
+                  >
+                    Edit
+                  </button>
+
+                )}
+
+                <button
+                  onClick={() => handleDelete(c._id)}
+                  disabled={deletingId === c._id}
+                  className="text-red-500 font-medium hover:underline"
+                >
+                  {deletingId === c._id ? "Deleting..." : "Delete"}
+                </button>
+
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
+
+      ))}
+
+      <div ref={loaderRef}></div>
+
+    </div>
+
+  </div>
+);
 };
 
 export default Comments;

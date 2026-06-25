@@ -172,6 +172,4 @@ const Login = () => {
 
 export default Login;
 
-//flow is user login -> then user , token stored in both Authcontext(which dissappears if app refresh) and localstorage (cannot delete token,user until we delete them from localstorage)
-//so when app refresh authcontext data delete but then again take user,token from local storage and app work
-//during logout ->delete user,token from both authcontext and localstorage as if we do not delete form local storage then again when app open authcontext get user,token from local storage
+

@@ -30,21 +30,64 @@ const ResetPassword = () => {
     }
   };
 
-  return (
-    <div>
-      <h2>Reset Password</h2>
+return (
+  <div className="min-h-screen bg-[#FFF7ED] flex items-center justify-center px-4">
 
-      <form onSubmit={handleReset}>
-        <input
-          type="password"
-          placeholder="New password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+    <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-orange-200">
 
-        <button type="submit">Reset Password</button>
+      {/* Heading */}
+      <div className="text-center mb-8">
+
+        <h1
+          className="text-5xl font-black text-[#EA580C]"
+          style={{ fontFamily: "'Ibarra Real Nova', serif" }}
+        >
+          NovaShelf
+        </h1>
+
+        <h2 className="text-3xl font-bold text-gray-800 mt-4">
+          Reset Password
+        </h2>
+
+        <p className="text-gray-500 mt-2">
+          Create a new secure password
+        </p>
+
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleReset} className="space-y-6">
+
+        {/* Password Input */}
+        <div>
+
+          <label className="block text-gray-700 mb-2 font-semibold">
+            New Password
+          </label>
+
+          <input
+            type="password"
+            placeholder="Enter new password"
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 rounded-2xl border border-orange-200 bg-orange-50 outline-none focus:ring-2 focus:ring-[#EA580C] focus:border-[#EA580C] placeholder:text-gray-400"
+          />
+
+        </div>
+
+        {/* Button */}
+        <button
+          type="submit"
+          className="w-full bg-[#EA580C] hover:bg-[#C2410C] transition text-white py-3 rounded-2xl font-bold text-lg"
+        >
+          Reset Password
+        </button>
+
       </form>
+
     </div>
-  );
+
+  </div>
+);
 };
 
 export default ResetPassword;
