@@ -6,6 +6,8 @@ import PendingUser from "../models/PendingUser.js";
 import crypto from "crypto";
 
 
+
+
 // generate token
 const generateToken = (id,role) => {
   return jwt.sign({
