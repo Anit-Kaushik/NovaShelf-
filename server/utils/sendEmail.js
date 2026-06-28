@@ -3,15 +3,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const sendEmail = async (to, subject, text) => {
+ const sendEmail = async (to, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp-relay.brevo.com",
       port: 587,
       secure: false, // true for 465, false for 587
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.BREVO_EMAIL,
+        pass: process.env.BREVO_SMTP_KEY,
       },
     });
 
@@ -31,3 +31,5 @@ export const sendEmail = async (to, subject, text) => {
     throw error;
   }
 };
+
+export default sendEmail;
