@@ -11,11 +11,16 @@ const sendEmail = async (to, subject, text) => {
       },
     });
 
+    console.log("➡️ Starting email send...");
+console.log("SMTP KEY EXISTS:", !!process.env.BREVO_SMTP_KEY);
+console.log("EMAIL:", process.env.BREVO_EMAIL);
+
     await transporter.sendMail({
       from: process.env.BREVO_EMAIL,
       to,
       subject,
       text,
+
     });
 
     console.log("Email sent successfully");
@@ -23,6 +28,7 @@ const sendEmail = async (to, subject, text) => {
     console.error("Email error:", error.message);
     throw error;
   }
+
 };
 
 export default sendEmail;
