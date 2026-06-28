@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
+const sendEmail = async (to, subject, text) => {
+  try {
+   const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
   port: 465,
   secure: true,
@@ -11,7 +13,7 @@ const transporter = nodemailer.createTransport({
   connectionTimeout: 10000,
 });
 
-
+    
 
     await transporter.sendMail({
       from: process.env.BREVO_EMAIL,
