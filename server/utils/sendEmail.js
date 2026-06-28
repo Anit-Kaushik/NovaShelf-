@@ -1,34 +1,35 @@
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first");
+
 import nodemailer from "nodemailer";
 
 const sendEmail = async (to, subject, text) => {
   try {
-   const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.BREVO_EMAIL,
-    pass: process.env.BREVO_SMTP_KEY,
-  },
-  connectionTimeout: 10000,
-});
+    console.log("📧 Email sending started...");
 
-    
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // SSL
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      connectionTimeout: 10000,
+    });
 
-    await transporter.sendMail({
-      from: process.env.BREVO_EMAIL,
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
       to,
       subject,
       text,
-
     });
 
-    console.log("Email sent successfully");
+    console.log("✅ Email sent successfully:", info.messageId);
   } catch (error) {
-    console.error("Email error:", error.message);
+    console.error("❌ Email error:", error.message);
     throw error;
   }
-
 };
 
 export default sendEmail;
