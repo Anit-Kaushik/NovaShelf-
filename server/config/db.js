@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 
-dotenv.config();
+
 
 
 const connectDB = async () => {
@@ -10,7 +10,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Connected ✅");
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     process.exit(1);
   }
 };

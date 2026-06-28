@@ -22,8 +22,8 @@ const sendEmail = async (to, subject, text) => {
 
     console.log("Email sent successfully");
   } catch (error) {
-    console.log("Email error:", error.message);
-    console.log("cannot send otp");
+     console.error("Email error:", error.message);
+  throw error;
   }
 };
 

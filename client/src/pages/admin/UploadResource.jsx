@@ -1,75 +1,115 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../../api/axios";
 import { toast } from "react-toastify";
 
 const UploadResource = () => {
+  const navigate = useNavigate();
+
+  const fileRef = useRef(null);
 
   const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
-  const [file, setFile] = useState(null);
   const [type, setType] = useState("");
+  const [file, setFile] = useState(null);
 
   const [loading, setLoading] = useState(false);
-
-  // ✅ NEW STATE
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const handleUpload = async (e) => {
+  const resetForm = () => {
+    setTitle("");
+    setAuthor("");
+    setCategory("");
+    setType("");
+    setFile(null);
+    setUploadProgress(0);
 
+    if (fileRef.current) {
+      fileRef.current.value = "";
+    }
+  };
+
+  const handleUpload = async (e) => {
     e.preventDefault();
 
-    if (!title || !category || !type || !file) {
-      toast.error("All fields are required");
+    if (loading) return;
+
+    if (!title.trim()) {
+      toast.error("Title is required");
+      return;
+    }
+
+    if (!author.trim()) {
+      toast.error("Author is required");
+      return;
+    }
+
+    if (!category.trim()) {
+      toast.error("Category is required");
+      return;
+    }
+
+    if (!type) {
+      toast.error("Select resource type");
+      return;
+    }
+
+    if (!file) {
+      toast.error("Please choose a PDF");
+      return;
+    }
+
+    if (file.type !== "application/pdf") {
+      toast.error("Only PDF files are allowed");
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Maximum file size is 20 MB");
       return;
     }
 
     try {
-
       setLoading(true);
 
       const formData = new FormData();
 
-      formData.append("title", title);
-      formData.append("category", category);
-      formData.append("file", file);
+      formData.append("title", title.trim());
+      formData.append("author", author.trim());
+      formData.append("category", category.trim());
       formData.append("type", type);
+      formData.append("file", file);
 
-      await API.post(
-        "/resources/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      await API.post("/resources/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
 
-          // ✅ Upload Progress
-          onUploadProgress: (progressEvent) => {
-
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) /
+                progressEvent.total
             );
 
-            setUploadProgress(percentCompleted);
-          },
-        }
-      );
+            setUploadProgress(percent);
+          }
+        },
+      });
 
       toast.success("Resource uploaded successfully");
 
-      setTitle("");
-      setCategory("");
-      setFile(null);
-      setType("");
+      resetForm();
 
+      navigate("/admin/resources");
     } catch (error) {
-
-      toast.error(error.response?.data?.message || "Upload failed");
-
+      toast.error(
+        error.response?.data?.message ||
+          "Unable to upload resource"
+      );
     } finally {
-
       setLoading(false);
-
-      // Reset Progress
       setUploadProgress(0);
     }
   };
@@ -79,7 +119,6 @@ const UploadResource = () => {
 
       <div className="w-full max-w-2xl bg-[#CCFBF1] rounded-3xl shadow-2xl p-8">
 
-        {/* Heading */}
         <div className="text-center mb-8">
 
           <h1
@@ -94,117 +133,138 @@ const UploadResource = () => {
           </h2>
 
           <p className="text-[#115E59] mt-2">
-            Add new learning resources to your library
+            Upload learning resources for students.
           </p>
 
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleUpload} className="space-y-6">
+        <form
+          onSubmit={handleUpload}
+          className="space-y-6"
+        >
 
-          {/* Title */}
           <div>
-
-            <label className="block text-[#134E4A] mb-2 font-semibold">
+            <label className="block mb-2 font-semibold text-[#134E4A]">
               Title
             </label>
 
             <input
               type="text"
-              placeholder="Enter title"
+              disabled={loading}
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white outline-none focus:ring-2 focus:ring-[#0F766E]"
+              onChange={(e) =>
+                setTitle(e.target.value)
+              }
+              className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white focus:ring-2 focus:ring-[#0F766E] outline-none"
+              placeholder="Enter resource title"
             />
-
           </div>
 
-          {/* Category */}
           <div>
+            <label className="block mb-2 font-semibold text-[#134E4A]">
+              Author
+            </label>
 
-            <label className="block text-[#134E4A] mb-2 font-semibold">
+            <input
+              type="text"
+              disabled={loading}
+              value={author}
+              onChange={(e) =>
+                setAuthor(e.target.value)
+              }
+              className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white focus:ring-2 focus:ring-[#0F766E] outline-none"
+              placeholder="Author name"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-semibold text-[#134E4A]">
               Category
             </label>
 
             <input
               type="text"
-              placeholder="Enter category"
+              disabled={loading}
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white outline-none focus:ring-2 focus:ring-[#0F766E]"
+              onChange={(e) =>
+                setCategory(e.target.value)
+              }
+              className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white focus:ring-2 focus:ring-[#0F766E] outline-none"
+              placeholder="Example: Operating System"
             />
-
           </div>
 
-          {/* Type */}
           <div>
-
-            <label className="block text-[#134E4A] mb-2 font-semibold">
+            <label className="block mb-2 font-semibold text-[#134E4A]">
               Resource Type
             </label>
 
             <select
+              disabled={loading}
               value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white outline-none focus:ring-2 focus:ring-[#0F766E]"
+              onChange={(e) =>
+                setType(e.target.value)
+              }
+              className="w-full px-4 py-3 rounded-xl border border-[#5EEAD4] bg-white focus:ring-2 focus:ring-[#0F766E] outline-none"
             >
-
               <option value="">Select Type</option>
+              <option value="book">Book</option>
               <option value="pdf">PDF</option>
               <option value="notes">Notes</option>
               <option value="ebook">E-Book</option>
-              <option value="question-paper">Question Paper</option>
               <option value="assignment">Assignment</option>
-
+              <option value="question-paper">
+                Question Paper
+              </option>
+              <option value="video">Video</option>
             </select>
-
           </div>
 
-          {/* File Upload */}
           <div>
-
-            <label className="block text-[#134E4A] mb-2 font-semibold">
-              Upload PDF
+            <label className="block mb-2 font-semibold text-[#134E4A]">
+              PDF File
             </label>
 
             <input
+              ref={fileRef}
+              disabled={loading}
               type="file"
-              accept="application/pdf"
-              onChange={(e) => setFile(e.target.files[0])}
-              className="w-full bg-white border border-[#5EEAD4] rounded-xl p-3 text-[#134E4A] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#0F766E] file:text-white file:font-semibold hover:file:bg-[#115E59]"
+              accept=".pdf"
+              onChange={(e) =>
+                setFile(e.target.files[0])
+              }
+              className="w-full border border-[#5EEAD4] rounded-xl bg-white p-3"
             />
-
           </div>
 
-          {/* ✅ Progress Bar */}
           {loading && (
-
             <div>
 
-              <div className="w-full bg-[#99F6E4] rounded-full h-4 overflow-hidden">
+              <div className="w-full h-4 rounded-full bg-[#99F6E4] overflow-hidden">
 
                 <div
-                  className="bg-[#0F766E] h-4 transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
-                ></div>
+                  className="h-full bg-[#0F766E] transition-all"
+                  style={{
+                    width: `${uploadProgress}%`,
+                  }}
+                />
 
               </div>
 
-              <p className="text-[#134E4A] font-semibold mt-2 text-center">
+              <p className="text-center mt-2 font-semibold text-[#134E4A]">
                 Uploading... {uploadProgress}%
               </p>
 
             </div>
-
           )}
 
-          {/* Button */}
           <button
-            type="submit"
             disabled={loading}
-            className="w-full bg-[#0F766E] hover:bg-[#115E59] transition text-white py-3 rounded-xl font-bold text-lg disabled:opacity-50"
+            className="w-full py-3 rounded-xl bg-[#0F766E] text-white font-bold hover:bg-[#115E59] transition disabled:opacity-60"
           >
-            {loading ? "Uploading..." : "Upload"}
+            {loading
+              ? "Uploading..."
+              : "Upload Resource"}
           </button>
 
         </form>

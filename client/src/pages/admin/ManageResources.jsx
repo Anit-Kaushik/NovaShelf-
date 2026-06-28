@@ -6,17 +6,25 @@ import { useNavigate } from "react-router-dom";
 const ManageResources = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   const navigate = useNavigate();
 
-  // FETCH ALL RESOURCES
+  // FETCH RESOURCES
   const fetchResources = async () => {
     try {
+      setLoading(true);
+
       const res = await API.get("/resources");
 
-      setResources(res.data);
+      if (Array.isArray(res.data)) {
+        setResources(res.data);
+      } else {
+        setResources([]);
+      }
     } catch (error) {
       toast.error("Failed to load resources");
+      setResources([]);
     } finally {
       setLoading(false);
     }
@@ -28,124 +36,135 @@ const ManageResources = () => {
 
   // DELETE RESOURCE
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Delete this resource?");
+    if (deletingId) return;
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this resource?"
+    );
 
     if (!confirmDelete) return;
 
     try {
-      await API.delete(`/resources/${id}`); //is router.delete("/:id", protect, isAdmin, deleteResource);
+      setDeletingId(id);
 
-      toast.success("Resource deleted");
+      await API.delete(`/resources/${id}`);
 
-      // remove from UI instantly no need of refreshment
-      setResources((prev) => prev.filter((item) => item._id !== id));
+      toast.success("Resource deleted successfully");
+
+      setResources((prev) =>
+        prev.filter((item) => item._id !== id)
+      );
     } catch (error) {
-      toast.error(error.response?.data?.message || "Delete failed");
+      toast.error(
+        error.response?.data?.message || "Delete failed"
+      );
+    } finally {
+      setDeletingId(null);
     }
   };
 
+  // LOADING UI
   if (loading) {
-    return <h3>Loading...</h3>;
+    return (
+      <div className="min-h-screen bg-[#0F766E] flex items-center justify-center">
+        <div className="text-white text-xl font-bold animate-pulse">
+          Loading resources...
+        </div>
+      </div>
+    );
   }
 
-return (
-  <div className="min-h-screen bg-[#0F766E] p-6">
+  return (
+    <div className="min-h-screen bg-[#0F766E] p-6">
 
-    
-    <div className="mb-8">
+      {/* HEADER */}
+      <div className="mb-8">
+        <h1 className="text-5xl font-black text-[#CCFBF1]">
+          NovaShelf
+        </h1>
 
-      <h1
-        className="text-5xl font-black text-[#CCFBF1]"
-        style={{ fontFamily: "'Ibarra Real Nova', serif" }}
-      >
-        NovaShelf
-      </h1>
+        <h2 className="text-3xl font-bold text-white mt-3">
+          Manage Resources
+        </h2>
 
-      <h2 className="text-3xl font-bold text-white mt-3">
-        Manage Resources
-      </h2>
-
-      <p className="text-[#99F6E4] mt-2">
-        Edit and manage all uploaded resources
-      </p>
-
-    </div>
-
-    {/* No Resources */}
-    {resources.length === 0 ? (
-
-      <div className="bg-[#CCFBF1] rounded-2xl p-6 text-center shadow-lg">
-
-        <p className="text-[#134E4A] text-lg font-semibold">
-          No resources found
+        <p className="text-[#99F6E4] mt-2">
+          Edit and manage all uploaded resources
         </p>
-
       </div>
 
-    ) : (
+      {/* EMPTY STATE */}
+      {resources.length === 0 ? (
+        <div className="bg-[#CCFBF1] rounded-2xl p-10 text-center shadow-lg">
+          <p className="text-[#134E4A] text-lg font-semibold">
+            No resources found
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {resources.map((item) => (
+            <div
+              key={item._id}
+              className="bg-[#CCFBF1] rounded-3xl p-6 shadow-xl hover:scale-[1.02] transition"
+            >
 
-        {resources.map((item) => (
+              {/* TITLE */}
+              <h3 className="text-2xl font-bold text-[#134E4A] mb-3">
+                {item.title}
+              </h3>
 
-          <div
-            key={item._id}
-            className="bg-[#CCFBF1] rounded-3xl p-6 shadow-xl hover:scale-[1.02] transition duration-300"
-          >
+              {/* DETAILS */}
+              <div className="space-y-2 mb-6 text-sm">
 
-            {/* Title */}
-            <h3 className="text-2xl font-bold text-[#134E4A] mb-4">
-              {item.title}
-            </h3>
+                <p className="text-[#115E59]">
+                  Category:{" "}
+                  <span className="text-[#134E4A] font-medium">
+                    {item.category}
+                  </span>
+                </p>
 
-            {/* Details */}
-            <div className="space-y-2 mb-6">
+                <p className="text-[#115E59]">
+                  Type:{" "}
+                  <span className="text-[#134E4A] font-medium">
+                    {item.type}
+                  </span>
+                </p>
 
-              <p className="text-[#115E59] font-medium">
-                Category:{" "}
-                <span className="font-normal text-[#134E4A]">
-                  {item.category}
-                </span>
-              </p>
+              </div>
 
-              <p className="text-[#115E59] font-medium">
-                Type:{" "}
-                <span className="font-normal text-[#134E4A]">
-                  {item.type}
-                </span>
-              </p>
+              {/* BUTTONS */}
+              <div className="flex gap-3">
+
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/admin/resources/edit/${item._id}`
+                    )
+                  }
+                  className="flex-1 bg-[#0F766E] hover:bg-[#115E59] text-white py-2 rounded-xl font-semibold"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  disabled={deletingId === item._id}
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl font-semibold disabled:opacity-50"
+                >
+                  {deletingId === item._id
+                    ? "Deleting..."
+                    : "Delete"}
+                </button>
+
+              </div>
 
             </div>
+          ))}
 
-            {/* Buttons */}
-            <div className="flex gap-3">
-
-              <button
-                onClick={() => navigate(`/admin/resources/edit/${item._id}`)}
-                className="flex-1 bg-[#0F766E] hover:bg-[#115E59] transition text-white py-2 rounded-xl font-semibold"
-              >
-                Edit
-              </button>
-
-              <button
-                onClick={() => handleDelete(item._id)}
-                className="flex-1 bg-red-500 hover:bg-red-600 transition text-white py-2 rounded-xl font-semibold"
-              >
-                Delete
-              </button>
-
-            </div>
-
-          </div>
-
-        ))}
-
-      </div>
-
-    )}
-
-  </div>
-);
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default ManageResources;

@@ -1,86 +1,103 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const AdminLayout = () => {
-return (
-  <div className="min-h-screen bg-[#FFF7ED]">
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-    
-    <div className="bg-[#EA580C] text-white shadow-lg px-8 py-4 flex items-center justify-between">
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
 
-      
-      <div>
+  const navClass = ({ isActive }) =>
+    `px-4 py-2 rounded-xl font-medium transition ${
+      isActive
+        ? "bg-[#C2410C] text-white"
+        : "hover:bg-[#C2410C] text-white"
+    }`;
 
-        <h1
-          className="text-4xl font-black"
-          style={{ fontFamily: "'Ibarra Real Nova', serif" }}
-        >
-          NovaShelf
-        </h1>
+  return (
+    <div className="min-h-screen bg-[#FFF7ED]">
 
-        <p className="text-orange-100 text-sm">
-          Admin Panel
-        </p>
+      {/* Navbar */}
+      <header className="sticky top-0 z-50 bg-[#EA580C] text-white shadow-lg">
 
-      </div>
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 px-6 py-4">
 
-     
-      <div className="flex items-center gap-4 flex-wrap">
+          {/* Logo */}
+          <div>
+            <h1
+              className="text-4xl font-black"
+              style={{ fontFamily: "'Ibarra Real Nova', serif" }}
+            >
+              NovaShelf
+            </h1>
 
-        <Link
-          to=""
-          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
-        >
-          Dashboard
-        </Link>
+            <p className="text-orange-100 text-sm">
+              Admin Panel
+            </p>
+          </div>
 
-        <Link
-          to="resources-view"
-          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
-        >
-          Resources
-        </Link>
+          {/* Navigation */}
+          <nav className="flex flex-wrap gap-3">
 
-        <Link
-          to="profile"
-          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
-        >
-          Profile
-        </Link>
+            <NavLink end to="" className={navClass}>
+              Dashboard
+            </NavLink>
 
-        <Link
-          to="upload"
-          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
-        >
-          Upload
-        </Link>
+            <NavLink to="resources-view" className={navClass}>
+              Resources
+            </NavLink>
 
-        <Link
-          to="resources"
-          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
-        >
-          Manage
-        </Link>
+            <NavLink to="profile" className={navClass}>
+              Profile
+            </NavLink>
 
-        <Link
-          to="users"
-          className="px-4 py-2 rounded-xl hover:bg-[#C2410C] transition font-medium"
-        >
-          Users
-        </Link>
+            <NavLink to="upload" className={navClass}>
+              Upload
+            </NavLink>
 
-      </div>
+            <NavLink to="resources" className={navClass}>
+              Manage
+            </NavLink>
+
+            <NavLink to="users" className={navClass}>
+              Users
+            </NavLink>
+
+          </nav>
+
+          {/* User + Logout */}
+          <div className="flex items-center gap-4">
+
+            <span className="hidden sm:block font-semibold">
+              👋 {user?.name}
+            </span>
+
+            <button
+              onClick={handleLogout}
+              className="bg-white text-[#EA580C] px-4 py-2 rounded-xl font-semibold hover:bg-orange-100 transition"
+            >
+              Logout
+            </button>
+
+          </div>
+
+        </div>
+
+      </header>
+
+      {/* Page Content */}
+      <main className="max-w-7xl mx-auto p-6">
+        <Outlet />
+      </main>
 
     </div>
-
-    
-    <div className="p-6">
-
-      <Outlet />
-
-    </div>
-
-  </div>
-);
+  );
 };
 
 export default AdminLayout;

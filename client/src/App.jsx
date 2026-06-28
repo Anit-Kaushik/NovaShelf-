@@ -3,7 +3,7 @@ import Login from "./pages/Login";
 // react router dom -->Normally websites reload pages. but with this library it changes components/pages instantly.withour reload
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Navbar from "./components/Navbar";
+
 import AdminRoute from "./components/AdminRoute";
 import Comments from "./pages/Comments";
 import { ToastContainer } from "react-toastify";
