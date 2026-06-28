@@ -1,35 +1,33 @@
-import dns from "dns";
-dns.setDefaultResultOrder("ipv4first");
-
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
 
-const sendEmail = async (to, subject, text) => {
+dotenv.config();
+
+export const sendEmail = async (to, subject, text) => {
   try {
-    console.log("📧 Email sending started...");
-
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "smtp-relay.brevo.com",
       port: 587,
-      secure: true, // SSL
+      secure: false, // true for 465, false for 587
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
-      connectionTimeout: 10000,
     });
 
-    const info = await transporter.sendMail({
+    const mailOptions = {
       from: process.env.EMAIL_USER,
       to,
       subject,
       text,
-    });
+    };
 
-    console.log("✅ Email sent successfully:", info.messageId);
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log("Email sent:", info.response);
+    return info;
   } catch (error) {
-    console.error("❌ Email error:", error.message);
+    console.log("Email error:", error.message);
     throw error;
   }
 };
-
-export default sendEmail;
