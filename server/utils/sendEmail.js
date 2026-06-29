@@ -3,20 +3,18 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
- const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 587,
-      secure: false, // true for 465, false for 587
+      service: "gmail",
       auth: {
-        user: process.env.BREVO_EMAIL,
-        pass: process.env.BREVO_SMTP_KEY,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"NovaShelf" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       text,
@@ -24,10 +22,10 @@ dotenv.config();
 
     const info = await transporter.sendMail(mailOptions);
 
-    console.log("Email sent:", info.response);
+    console.log("Email sent:", info.messageId);
     return info;
   } catch (error) {
-    console.log("Email error:", error.message);
+    console.error("Email error:", error);
     throw error;
   }
 };
