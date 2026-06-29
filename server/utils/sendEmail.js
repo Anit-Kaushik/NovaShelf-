@@ -6,21 +6,24 @@ dotenv.config();
 const sendEmail = async (to, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
 
-    const mailOptions = {
+    await transporter.verify();
+    console.log("SMTP connection successful");
+
+    const info = await transporter.sendMail({
       from: `"NovaShelf" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       text,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
+    });
 
     console.log("Email sent:", info.messageId);
     return info;
