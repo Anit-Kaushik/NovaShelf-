@@ -9,6 +9,7 @@ dotenv.config();
 const sendEmail = async (to, subject, text) => {
   try {
     
+    
     const transporter = nodemailer.createTransport({
       host: "smtp-relay.brevo.com",
       port: 587,
