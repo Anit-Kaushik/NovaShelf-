@@ -22,19 +22,21 @@ const ForgotPassword = () => {
       toast.error("Please enter a valid email");
       return;
     }
-
+    
     setLoading(true);
 
     try {
       await API.post("/users/forgot-password", {
         email: email.trim(),
+        
       });
 
       toast.success("Password reset link sent to your email");
       setEmail("");
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
+        error.response?.data?.message 
+        ||
           "Unable to send password reset link"
       );
     } finally {

@@ -20,7 +20,7 @@ const sendEmail = async (to, subject, text) => {
       },
     });
 
-    await transporter.verify();
+    // await transporter.verify();
     console.log("Brevo SMTP connected");
 
     const info = await transporter.sendMail({
