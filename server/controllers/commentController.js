@@ -31,10 +31,10 @@ export const getComments = async (req, res) => {
       pdf: req.params.pdfId
     });
 
-    const comments = await Comment.find({ pdf: req.params.pdfId }
+    const comments = await Comment.find({ pdf: req.params.pdfId })
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit));
+      .limit(limit);
 
     res.json({
       comments,
