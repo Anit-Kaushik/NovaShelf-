@@ -1,6 +1,6 @@
 import dns from "dns";
-
 dns.setDefaultResultOrder("ipv4first");
+
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
@@ -8,31 +8,32 @@ dotenv.config();
 
 const sendEmail = async (to, subject, text) => {
   try {
+    
     const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.BREVO_EMAIL,
+        pass: process.env.BREVO_SMTP_KEY,
+      },
+    });
 
     await transporter.verify();
-    console.log("SMTP connection successful");
+    console.log("Brevo SMTP connected");
 
     const info = await transporter.sendMail({
-      from: `"NovaShelf" <${process.env.EMAIL_USER}>`,
+      from: `"NovaShelf" <${process.env.BREVO_EMAIL}>`,
       to,
       subject,
       text,
     });
 
     console.log("Email sent:", info.messageId);
+
     return info;
   } catch (error) {
-    console.error("Email error:", error.stack || error);;
+    console.error(error);
     throw error;
   }
 };
