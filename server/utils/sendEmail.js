@@ -23,7 +23,7 @@ const sendEmail = async (to, subject, text) => {
     console.log("Brevo SMTP connected");
 
     const info = await transporter.sendMail({
-      from: `"NovaShelf" <${process.env.BREVO_EMAIL}>`,
+      from: `"NovaShelf" <${process.env.SENDER_EMAIL}>`,
       to,
       subject,
       text,

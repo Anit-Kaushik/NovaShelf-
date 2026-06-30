@@ -63,7 +63,31 @@ const user = await PendingUser.findOneAndUpdate(
     await sendEmail(
       email,
       "Verify Your Email",
-      `Your verification code is: ${otp}`
+      
+      `Subject: Verify Your NovaShelf Account
+
+Hello,
+
+Thank you for choosing **NovaShelf**.
+
+To complete your verification, please use the One-Time Password (OTP) below:
+
+━━━━━━━━━━━━━━━━━━━━
+Verification Code: **${otp}**
+━━━━━━━━━━━━━━━━━━━━
+
+This verification code is valid for the next **10 minutes**. Please do not share this code with anyone, including NovaShelf staff, as it is intended only for your account verification.
+
+If you did not request this verification code, you can safely ignore this email. No changes will be made to your account unless this code is entered.
+
+Thank you for being a part of the NovaShelf community.
+
+Best regards,
+
+**NovaShelf Team**
+
+Empowering Learning, One Book at a Time.
+`
     );
 
     res.status(201).json({
@@ -227,7 +251,27 @@ export const forgotPassword = async (req, res) => {
     await sendEmail(
       email,
       "Password Reset Request",
-      `Click this link to reset your password: ${resetLink}`
+      
+      `Hello,
+
+We received a request to reset the password for your **NovaShelf** account.
+
+To reset your password, please click the link below:
+
+${resetLink}
+
+If you did not request a password reset, you can safely ignore this email. Your password will remain unchanged.
+
+For your security, this password reset link will expire in **15 minutes**.
+
+If you continue to experience any issues, please contact the NovaShelf support team.
+
+Thank you for using NovaShelf!
+
+Best regards,
+
+**NovaShelf Team**
+`
     );
 
     res.json({
